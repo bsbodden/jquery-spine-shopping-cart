@@ -1,0 +1,52 @@
+<html>
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/cupertino/jquery-ui.css" rel="stylesheet" />
+    <link type="text/css" href="styles/shopping_cart.css" rel="stylesheet" />
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.js"></script>
+    <script src="lib/jquery.tmpl.js" type="text/javascript" charset="utf-8"></script> 
+
+    <script src="lib/spine.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/spine.model.local.js" type="text/javascript" charset="utf-8"></script>
+    
+    <!-- Pull in our Models and Controller -->
+    <script src="app/models/item.js" type="text/javascript" charset="utf-8"></script>
+    <script src="app/controllers/cart_item.js" type="text/javascript" charset="utf-8"></script>
+    <script src="app/controllers/shopping_cart.js" type="text/javascript" charset="utf-8"></script>
+    <script src="app/application.js" type="text/javascript" charset="utf-8"></script>
+        
+    <!-- jQuery Template for CartItem -->
+    <script type="text/x-jquery-tmpl" id="cartItem">
+        <li class="product ui-state-default" id="item_${pid}" price="${price}">
+            ${label()}
+            (<span id="qty">${quantity}</span>)
+            <a href="#" class="add">+</a>
+            <a href="#" class="remove">-</a>
+        </li>
+    </script>
+
+    <!-- jQuery Template for ShoppingCart -->
+    <script type="text/x-jquery-tmpl" id="shoppingCart">
+        <div id="cart">
+            <ul class="items"></ul>
+        </div>
+        <p>Total: $<span id="total">0.00</span></p>
+        <button id="dump">Dump the cart!</button>
+    </script>
+</head>
+<body>
+    <h2>jQuery/Spine.js Shopping Cart</h2>
+
+    <h3>Available Products</h3>
+    <ul class="products" id="products">
+        <li class="product ui-state-default" name="Product 0" id="item_0" price="100.0">Product 0 - $100</li>
+        <li class="product ui-state-default" name="Product 1" id="item_1" price="110.0">Product 1 - $110</li>
+        <li class="product ui-state-default" name="Product 2" id="item_2" price="120.0">Product 2 - $120</li>
+    </ul>
+
+    <h3>Your Shopping Cart</h3>
+    <div id="theCart"></div>
+</body>
+</html>
