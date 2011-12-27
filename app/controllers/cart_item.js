@@ -8,19 +8,19 @@ jQuery(function($){
             
             this.item.bind("update", this.updateQty);
             
-            $('.add', this.el).live('click', function(e) { 
+            $('#item_' + this.item.pid + ' .add').live('click', function(e) { 
                 cartItem.add(); 
                 e.preventDefault(); 
             });
             
-            $('.remove', this.el).live('click', function(e) { 
+            $('#item_' + this.item.pid + ' .remove').live('click', function(e) { 
                 cartItem.remove(); 
                 e.preventDefault(); 
             });
         },
         
         render: function(){
-            this.el = ($("#cartItem").tmpl(this.item));
+            this.el = $.mustache($("#cartItem").html(), this.item);
             
             return this;
         },
@@ -38,7 +38,7 @@ jQuery(function($){
     
         // ui methods
         updateQty: function(e) {
-            $('#qty', this.el)
+            $('#item_' + this.item.pid + ' #qty')
                 .text(this.item.quantity)
                 .effect("highlight", {}, 1500);
         }

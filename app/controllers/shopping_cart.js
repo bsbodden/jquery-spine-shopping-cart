@@ -55,7 +55,7 @@ jQuery(function($){
         },
         
         render: function(){
-            this.el.html($("#shoppingCart").tmpl());
+            this.el.html($.mustache($("#shoppingCart").html(), {}));
             
             $('#dump').button();
 
