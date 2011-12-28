@@ -1,5 +1,6 @@
 // Create the Item model.
-var Item = Spine.Model.setup("Item", ["name", "pid", "price", "quantity"]);
+var Item = Spine.Model.sub();
+Item.configure("Item", "name", "pid", "price", "quantity");
 
 // Persist model between page reloads.
 Item.extend(Spine.Model.Local);
@@ -14,7 +15,7 @@ Item.include({
     increase: function(quantity) {
         quantity = (typeof(quantity) != 'undefined') ? quantity : 1;
         this.quantity = this.quantity + quantity;
-        this.save();
+		this.trigger("quantityChanged");
     },
     //
     decrease: function(quantity) {
@@ -25,7 +26,7 @@ Item.include({
         else {
             this.quantity = 0;
         }
-        this.save();
+		this.trigger("quantityChanged");
     },
     // 
     label: function() {

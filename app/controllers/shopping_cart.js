@@ -1,14 +1,12 @@
 jQuery(function($){
-    window.ShoppingCart = Spine.Controller.create({
+    window.ShoppingCart = Spine.Controller.sub({
         el: $("#theCart"),
         
-        proxied: ["drop", "clear", "removeItem", "total", "updateCartTotal", "removeIfQuantityZero", "addItem"],
-
-        init: function(){
+        init: function() {
             var cart = this;
             this.items = {};
             $.each(Item.all(), function(){ cart.addItem(this); });
-            this.el.droppable({ accept: '.product', drop: this.drop });
+            this.el.droppable({ accept: '.product', drop: this.proxy(this.drop) });
             $('#dump', this.el).live('click', function() { cart.clear(); });
         },
         
@@ -38,7 +36,7 @@ jQuery(function($){
             return size;
         },
         
-        drop: function(ev, ui){
+        drop: function(ev, ui) {
             var item_dropped = ui.draggable;
             var pid = item_dropped.attr('id');
             var price = item_dropped.attr('price');
@@ -54,7 +52,7 @@ jQuery(function($){
             }
         },
         
-        render: function(){
+        render: function() {
             this.el.html($.mustache($("#shoppingCart").html(), {}));
             
             $('#dump').button();
@@ -66,15 +64,15 @@ jQuery(function($){
             this.updateCartTotal();
         },
         
-        removeItem: function(item){
+        removeItem: function(item) {
             $('#item_' + item.pid).effect("puff", {}, "slow", function(){ $(this).remove(); });
         },
         
-        updateCartTotal: function(){
+        updateCartTotal: function() {
             $('#total').text(this.total()).effect("highlight", {}, 1500);
         },
         
-        removeIfQuantityZero: function(item){
+        removeIfQuantityZero: function(item) {
             if (item.quantity == 0) {
                 this.removeItem(item);
                 delete this.items[item.pid];
@@ -84,10 +82,12 @@ jQuery(function($){
         
         addItem: function(item) {
             this.items[item.pid] = item;
-            item.bind("change", this.updateCartTotal);
-            item.bind("update", this.removeIfQuantityZero);
-            item.bind("destroy", this.removeItem);
+            item.bind("quantityChanged", this.proxy(this.updateCartTotal));
+            item.bind("quantityChanged", this.proxy(this.removeIfQuantityZero));
+			item.bind("quantityChanged", function() { item.save() });
+            item.bind("destroy", this.proxy(this.removeItem));
             item.save();
+            this.updateCartTotal();
         }
 
     });
